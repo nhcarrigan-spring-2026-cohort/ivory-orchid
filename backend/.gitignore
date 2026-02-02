@@ -1,0 +1,27 @@
+# Virtual environment
+venv/
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Flask
+instance/
+.webassets-cache
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# Database
+*.db
+*.sqlite
+
+# Editor
+.vscode/
+.idea/
