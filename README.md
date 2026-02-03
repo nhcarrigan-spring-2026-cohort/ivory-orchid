@@ -18,7 +18,7 @@ Our goal is simple:
 ## Tech Stack
 
 - **Backend**: Python, Flask
-- **Frontend**: TBD
+- **Frontend**: HTML/CSS/Plain JS
 - **Database**: TBD
 - **Version Control**: Git & GitHub
 
