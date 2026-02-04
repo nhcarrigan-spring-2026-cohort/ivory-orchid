@@ -10,9 +10,10 @@ from . import app
 #Directory where non-template files are searched
 #Those paths are not checked
 #They will be first searched in FRONTEND, and then in the entry of FRONTEND_SPECIFIC
-FRONTEND = os.path.join(os.path.dirname(__file__), "..")
+FRONTEND = os.path.join(os.path.dirname(__file__), "../frontend")
 #Map of file extensions to directories, relative to FRONTEND
-FRONTEND_SPECIFIC = {"js": "js", "css": "css", "html": "static"}
+#FRONTEND_SPECIFIC = {"js": "js", "css": "css", "html": "static"}
+FRONTEND_SPECIFIC = {"js": "js", "css": "css"}
 
 #The name of the 404 page template
 TEMPLATE_404 = "404.html"
