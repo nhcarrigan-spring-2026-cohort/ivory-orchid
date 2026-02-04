@@ -77,19 +77,24 @@ Once your pull request is approved and merged, clean up your branch.
 
 ## Run the webserver
 
+Note: on Unix systems the python executable is sometimes called python3
+
 #### 1. Install python and pip
 
 1. Install python
    * Windows: ``winget python``
-   * Linux (debian/ubuntu): ``apt install python3``
+   * Linux (debian/ubuntu): ``sudo apt install python3``
 
 2. Install pip
 ``python -m pip install``
 
+3. Clone the repository (see above) and enter it (`cd ivory-orchid`)
+
 #### 2. (Optional) install and activate venv
 
 1. Install venv
-``python -m pip install venv``
+   * Windows: ``winget python-venv``
+   * Linux (debian/ubuntu): ``sudo apt install python3-venv``
 
 2. Change directory to the backend
 ``cd backend``
@@ -101,7 +106,7 @@ Once your pull request is approved and merged, clean up your branch.
 
 4. Activate the virtual environment 
    * Windows: ``.\.venv\Scripts\activate``
-   * Linux: ``source ./.venv/Scripts/activate``
+   * Linux: ``source .venv/bin/activate``
    
    To disable the virtual environment:
    * Windows command prompt: ``.\.venv\Scripts\deactivate``
@@ -111,7 +116,7 @@ Once your pull request is approved and merged, clean up your branch.
 #### 3. Install the dependencies
 
 ```bash
-pip install -r backend\requirements.txt
+pip install -r backend/requirements.txt
 ```
 
 #### 4. Run flask
