@@ -22,6 +22,9 @@ header {
   padding: 20px 10%;
   background-color: #FFFDF1;
   border-bottom: 2px solid #FFCE99;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .logo {
@@ -65,20 +68,195 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: calc(100vh - 90px);
+  width: 100%;
+  overflow: hidden;
+}
+
+.hero-image::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
 }
 
 .hero-photo {
   width: 100%;
-  height: auto;
-  max-height: 400px;
+  height: 100%;
   object-fit: cover;
 }
 
 .hero-text {
   position: absolute;
-  top: 50%;
-  left: 10%;
-  transform: translateY(-50%);
+  z-index: 2;
+  text-align: center;
+  padding: 0 20px;
   color: #FFFDF1;
-  max-width: 400px;
+  max-width: 800px;
+}
+
+.hero-text h1 {
+  font-size: 80px;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.hero-text p {
+  font-size: 30px;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+/*the cards desing start here*/
+
+.featured-friends {
+  width: 100%;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.card-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+  width: 100%;
+  max-width: 1460px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: #562F00;
+  text-align: center;
+  font-size: 40px;
+}
+
+.view-all {
+  position: absolute;
+  right: 20px;
+  text-decoration: none;
+  font-weight: bold;
+  border: 2px solid #562F00;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.view-all:hover {
+  background: #8d4f02;
+  color: #f0f0f0;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 0px;
+}
+
+.card {
+  width: 325px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  margin: 20px;
+  transition: transform 0.2s ease;
+}
+
+
+.card img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 20px;
+  text-align: center;
+}
+
+.card-content h3 {
+  font-size: 28px;
+  margin-bottom: 5px;
+  color: #562F00;
+}
+
+.card-content p {
+  color: #666;
+  font-size: 15px;
+  font-style: italic;
+  margin-bottom: 15px;
+  line-height: 1.3;
+}
+
+.tags-container {
+  gap: 8px;
+}
+
+.tag {
+  background-color: #FFCE99;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.card-img-container {
+  position: relative;
+  width: 100%;
+  height: 250px;
+}
+
+.card-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.like-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: white !important;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease;
+  z-index: 10;
+
+}
+
+.like-btn i {
+  color: #8d4f02 !important;
+  font-size: 18px;
+  pointer-events: none;
+  background: transparent;
+}
+
+.like-btn:hover {
+  transform: scale(1.2);
+  color: #8d4f02 !important;
+  font-weight: 900;
+}
+
+.like-btn:hover i::before {
+  transform: scale(1.2);
+  color: #8d4f02 !important;
+  font-weight: 900;
 }
