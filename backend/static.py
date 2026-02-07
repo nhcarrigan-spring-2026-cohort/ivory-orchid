@@ -17,6 +17,8 @@ FRONTEND_SPECIFIC = {"js": "js", "css": "css", "png": "img"}
 
 #The name of the 404-page template
 TEMPLATE_404 = "404.html"
+#The 404 static version of the page (fallback if the template version does not work)
+FILE_404 = "404.html"
 
 #Add here all the pages that have a different endpoint from the page name
 @app.route("/")
@@ -36,7 +38,7 @@ def main_page():
 def load_static(e):
 	# Prevent direct access to templates
 	if request.path.__contains__("templates"):
-		return render_template(TEMPLATE_404), 404
+		return page_404(), 404
 
 	paths = set()
 	paths.add(FRONTEND_DIRECTORY)
@@ -55,10 +57,14 @@ def load_static(e):
 		if os.path.exists(path):
 			return send_file(path)
 
+	return page_404(), 404
+
+def page_404():
+	"""Returns a 404 page and the 404 error-code"""
 	try:
-		return render_template(TEMPLATE_404), 404
+		return render_template(TEMPLATE_404)
 	except TemplateNotFound:
 		try:
-			return send_file("404.html"), 404
+			return send_file(FILE_404)
 		except:
-			return "An internal error occurred while trying to return the 404 error page ", 404
+			return "An internal error occurred while trying to return the 404 error page "
