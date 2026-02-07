@@ -13,7 +13,7 @@ from . import app
 #They will be first searched in FRONTEND, and then in the entry of FRONTEND_SPECIFIC
 FRONTEND_DIRECTORY = os.path.join(os.path.dirname(__file__), "../frontend")
 #Map of file extensions to directories, relative to FRONTEND
-FRONTEND_SPECIFIC = {"js": "js", "css": "css", "png": "img"}
+FRONTEND_SPECIFIC = {"js": "js", "css": "css", "png": "img", "jpg": "img"}
 
 #The name of the 404-page template
 TEMPLATE_404 = "404.html"
