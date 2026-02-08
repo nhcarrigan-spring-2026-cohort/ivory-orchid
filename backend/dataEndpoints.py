@@ -1,6 +1,6 @@
 from flask import Blueprint, Response
 
-data_bp = Blueprint('data', __name__)
+data_bp = Blueprint('data', __name__, url_prefix='/data')
 
 USE_DUMMY_VALUES = True #until the db is implemented
 
