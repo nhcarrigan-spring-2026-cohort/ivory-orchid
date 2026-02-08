@@ -59,10 +59,10 @@ if USE_DUMMY_VALUES:
 		dog3.animal = "dog"
 
 		cat1 = Pet()
-		cat1.name = ""
+		cat1.name = "Snowball"
 		cat1.sex = "male"
 		cat1.age = 10
-		cat1.description = "Very fat"
+		cat1.description = "Full of energy"
 		cat1.shelter_name = "shelterB"
 		cat1.status = True
 		cat1.size = 15
@@ -81,10 +81,10 @@ if USE_DUMMY_VALUES:
 		cat2.animal = "cat"
 
 		cat3 = Pet()
-		cat3.name = "cat3"
+		cat3.name = "sunny"
 		cat3.sex = "female"
 		cat3.age = 10
-		cat3.description = "i have finished my fantasy"
+		cat3.description = "Very fat"
 		cat3.shelter_name = "closedShelter"
 		cat3.status = False
 		cat3.size = 8
@@ -153,8 +153,6 @@ def jsonify(data: list | str | float | int, mapper = None) -> str:
 		result = ""
 		is_object = False #True if it's an object, false if it's a list
 		for item in data:
-			#value = mapper(item)
-
 			if isinstance(item, list):
 				result += jsonify(item, mapper) + ","
 
