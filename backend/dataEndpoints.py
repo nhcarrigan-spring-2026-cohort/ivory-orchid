@@ -15,6 +15,7 @@ if USE_DUMMY_VALUES:
 		size: float
 		shelter_name: str
 		status: bool
+		animal: str
 
 	# this is here until there is some real data structure
 	class Shelter:
@@ -33,6 +34,7 @@ if USE_DUMMY_VALUES:
 		dog1.status = True
 		dog1.size = 6.25
 		dog1.image_path = "Kripto.jpg"
+		dog1.animal = "dog"
 
 		dog2 = Pet()
 		dog2.name = "max"
@@ -43,6 +45,7 @@ if USE_DUMMY_VALUES:
 		dog2.status = True
 		dog2.size = 2.1
 		dog2.image_path = "dogandcat.jpg"
+		dog2.animal = "dog"
 
 		dog3 = Pet()
 		dog3.name = "bella"
@@ -53,6 +56,7 @@ if USE_DUMMY_VALUES:
 		dog3.status = True
 		dog3.size = 6.25
 		dog3.image_path = "Kripto.jpg"
+		dog3.animal = "dog"
 
 		cat1 = Pet()
 		cat1.name = ""
@@ -63,6 +67,7 @@ if USE_DUMMY_VALUES:
 		cat1.status = True
 		cat1.size = 15
 		cat1.image_path = "dogandcat.jpg"
+		cat1.animal = "cat"
 
 		cat2 = Pet()
 		cat2.name = "fog"
@@ -73,6 +78,7 @@ if USE_DUMMY_VALUES:
 		cat2.status = True
 		cat2.size = 3
 		cat2.image_path = "snowball.jpg"
+		cat2.animal = "cat"
 
 		cat3 = Pet()
 		cat3.name = "cat3"
@@ -83,6 +89,7 @@ if USE_DUMMY_VALUES:
 		cat3.status = False
 		cat3.size = 8
 		cat3.image_path = "dogandcat.jpg"
+		cat3.animal = "cat"
 
 		return [dog1, dog2, dog3, cat1, cat2, cat3]
 
@@ -112,6 +119,7 @@ if USE_DUMMY_VALUES:
 			("name", pet.name),
 			("shelter", pet.shelter_name),
 			("sex", pet.sex),
+			("type", pet.animal),
 			("age", pet.age),
 			("description", pet.description),
 			("size", pet.size),
