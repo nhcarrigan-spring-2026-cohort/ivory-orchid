@@ -134,6 +134,7 @@ if USE_DUMMY_VALUES:
 			("phone", shelter.phone_number),
 			("address", shelter.address)
 		]
+	#endif USE_DUMMY_VALUES
 
 @data_bp.route('/pets')
 @data_bp.route('/pets.json')
@@ -145,7 +146,16 @@ def pets():
 def shelters():
 	return Response(jsonify(get_shelters(), shelter_mapper), mimetype="application/json")
 
-def jsonify(data: list | str | float | int, mapper = None) -> str:
+def jsonify(data, mapper = None) -> str:
+	"""
+	Function to convert an object to a JSON string
+
+	Lists will be converted into JSON arrays
+
+	Lists of tuple of 2 elements will be converted into an object where the first element is the key and the second the value
+
+	Anything else will be passed to the mapper function (defaults to calling str()) which shall return a string
+	"""
 	if isinstance(data, list):
 		if mapper is None:
 			mapper = lambda x: str(x)
