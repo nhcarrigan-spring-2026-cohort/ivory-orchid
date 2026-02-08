@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, Response
 from flask import request
 from flask import send_file
 from jinja2 import TemplateNotFound
@@ -23,14 +23,19 @@ FILE_404 = "404.html"
 #Add here all the pages that have a different endpoint from the page name
 @app.route("/")
 def main_page():
-	try:
-		return render_template("index.html")
-	except TemplateNotFound:
-		try:
-			return send_file(os.path.join(FRONTEND_DIRECTORY, "index.html"))
-		except:
-			#this shouldn't ever happen, why would the index page disappear?
-			return "the site is currently unavailable (maybe it's in maintenance?)\ncode: index404"
+	return get_page_or_template("index.html", default="The site is currently unavailable (maybe it's in maintenance?)\ncode: index404")
+
+@app.route("/contact", methods=["GET", "POST"])
+@app.route("/contact.html", methods=["GET", "POST"])
+def contact_page():
+	print(request.method)
+	if request.method == "GET":
+		result = get_page_or_template("contact.html")
+		if isinstance(result, str) and len(result) == 0:
+			return get_page_or_template(FILE_404, TEMPLATE_404, "The requested page does not exists"), 404
+		return result
+	print(request.form)
+	return "Request successfully sent!"
 
 #Handles all pages not generated dynamically
 #Will return the page if found, else the TEMPLATE_404 template will be returned to the client
@@ -38,7 +43,7 @@ def main_page():
 def load_static(e):
 	# Prevent direct access to templates
 	if request.path.__contains__("templates"):
-		return page_404(), 404
+		return get_page_or_template(FILE_404, TEMPLATE_404, "The requested page does not exists"), 404
 
 	paths = set()
 	paths.add(FRONTEND_DIRECTORY)
@@ -48,7 +53,10 @@ def load_static(e):
 	except TemplateNotFound:
 		pass
 
-	filetype = request.path.split(".")[-1]
+	if request.path.contains("."):
+		filetype = request.path.split(".")[-1]
+	else: filetype = "html"
+
 	if filetype in FRONTEND_SPECIFIC:
 		paths.add(os.path.join(FRONTEND_DIRECTORY, FRONTEND_SPECIFIC[filetype]))
 
@@ -57,14 +65,18 @@ def load_static(e):
 		if os.path.exists(path):
 			return send_file(path)
 
-	return page_404(), 404
+	return get_page_or_template(FILE_404, TEMPLATE_404, "An internal error occurred while trying to return the 404 error page"), 404
 
-def page_404():
-	"""Returns a 404 page and the 404 error-code"""
+def get_page_or_template(page_name: str, template_name: str | None = None, default: str | None = None) -> str | Response:
+	if template_name is None:
+		template_name = page_name
 	try:
-		return render_template(TEMPLATE_404)
+		return render_template(template_name)
 	except TemplateNotFound:
+		# noinspection PyBroadException
 		try:
-			return send_file(FILE_404)
+			return send_file(safe_join(FRONTEND_DIRECTORY, page_name))
 		except:
-			return "An internal error occurred while trying to return the 404 error page "
+			if default is None:
+				return ""
+			return default
