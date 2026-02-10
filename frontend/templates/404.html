@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Page not found
+Page Not Found
 {% endblock %}
 
 {% block content %}
-The requested page was not found
+<div class="error-warning">
+  <h1>Oops! 404</h1>
+  <p>The page you're looking for doesn't exist.</p>
+  <a href="/">Return to Home</a>
+</div>
 {% endblock %}

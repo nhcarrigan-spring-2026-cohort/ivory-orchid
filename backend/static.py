@@ -3,7 +3,7 @@ from flask import request
 from flask import send_file
 from jinja2 import TemplateNotFound
 
-from werkzeug.security import safe_join
+from werkzeug.utils import safe_join
 import os
 
 from . import app
@@ -53,7 +53,7 @@ def load_static(e):
 	except TemplateNotFound:
 		pass
 
-	if request.path.contains("."):
+	if "." in request.path:
 		filetype = request.path.split(".")[-1]
 	else: filetype = "html"
 
