@@ -20,7 +20,8 @@ TEMPLATE_404 = "404.html"
 #The 404 static version of the page (fallback if the template version does not work)
 FILE_404 = "404.html"
 
-#Add here all the pages that have a different endpoint from the page name
+#Add here all the pages that have a different e
+# ndpoint from the page name
 @app.route("/")
 def main_page():
 	return get_page_or_template("index.html", default="The site is currently unavailable (maybe it's in maintenance?)\ncode: index404")
@@ -53,7 +54,7 @@ def load_static(e):
 	except TemplateNotFound:
 		pass
 
-	if request.path.contains("."):
+	if "." in request.path:
 		filetype = request.path.split(".")[-1]
 	else: filetype = "html"
 

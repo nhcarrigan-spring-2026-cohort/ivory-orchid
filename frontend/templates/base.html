@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
 </head>
 <body>
     <header>
@@ -12,7 +13,11 @@
         <img class='logo' src="/dogandcat.jpg" alt="logo">
 
         <!--navigation bar-->
-        <nav class='navbar'>
+        <nav class="navbar">
+            <a class="navbar-brand" href="/">
+                <img src="/img/favicon.ico" alt="Ivory Orchid" width="32" height="32">
+                Ivory Orchid
+            </a>
             <ul>
                 <li><a href="/index.html">Home</a></li>
                 <li><a href="/pets.html">Pets</a></li>

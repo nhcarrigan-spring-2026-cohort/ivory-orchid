@@ -99,6 +99,47 @@ button:hover {
   max-width: 800px;
 }
 
+.error-warning {
+  max-width: 600px;
+  margin: 60px auto;
+  padding: 40px;
+  background-color: #fff3cd;
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.error-warning h1 {
+  color: #856404;
+  font-size: 32px;
+  margin-bottom: 15px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.error-warning p {
+  color: #856404;
+  font-size: 18px;
+  margin-bottom: 25px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.error-warning a {
+  display: inline-block;
+  padding: 12px 30px;
+  background-color: #ffc107;
+  color: #562F00;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: all 0.3s ease 0s;
+}
+
+.error-warning a:hover {
+  background-color: #ffb300;
+  transform: scale(1.05);
+}
+
 .hero-text h1 {
   font-size: 80px;
   margin-bottom: 1rem;
