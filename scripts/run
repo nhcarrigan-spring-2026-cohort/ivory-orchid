@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+cd -- "$( dirname -- "${BASH_SOURCE[0]}" )"
+
+source ./backend/.venv/bin/activate
+flask --app=app run $@
+
+echo Clearing up...
+deactivate
