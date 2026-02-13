@@ -31,25 +31,26 @@
     </header>
 
     <!--adopt form-->
-
+       <h1>Adopt Form</h1>
+        <h3>Welcome to the adoption interest form. Please fill out the required fields below and you will be contacted from an Ivory Orchid staff within 1 business day.</h3>
 <section class="form">
     <center>
     <form>
-        <h1>Adopt Form</h1>
-        <h3>Welcome to the adoption interest form. Please fill out the required fields below and you will be contacted from an Ivory Orchid staff within 1 business day.</h3>
-        <p>Full Name:</p>
-        <input type="text">
-        <p>Date:</p>
-        <input type="text">
-        <p>Contact Email:</p>
-        <input type="text">
-        <p>Pet Type:</p>
-        <select name="pet-type">
+ 
+        
+        <label for="fname">Full Name:</label>
+        <input type="text" class="fname" name="fname" required>
+        <label for="fdate">Today's Date:</label>
+        <input type="text" class="fdate" name="fdate" required>
+        <label for="femail">Your Personal Email (gmail preferred):</label>
+        <input type="email" class="femail" name="femail" required>
+        <label for="fselect">Pet Type:</label>
+        <select class="fselect" name="fselect">
             <option value="Please choose a pet type"></option>
             <option value="cat">Cat</option>
             <option value="dog">Dog</option>
         </select>
-        <p>Name(s) and description:</p>
+        <label type="fmessagebody">Pet Name and Description:</label>
         <textarea></textarea>
         <br>
         <input type="submit">
