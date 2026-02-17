@@ -6,7 +6,7 @@ from jinja2 import TemplateNotFound
 from werkzeug.security import safe_join
 import os
 
-from . import app
+from . import app, utils
 
 #Directory where non-template files are searched
 #Those paths are not checked
@@ -34,8 +34,9 @@ def contact_page():
 		if isinstance(result, str) and len(result) == 0:
 			return get_page_or_template(FILE_404, TEMPLATE_404, "The requested page does not exists"), 404
 		return result
-	print(request.form)
-	return "Request successfully sent!"
+	utils.send_inquiry(request.form)
+
+	return "<html><head></head><body>Request successfully sent!\n<a href=\"/\">Return to the home</a></body></html>"
 
 #Handles all pages not generated dynamically
 #Will return the page if found, else the TEMPLATE_404 template will be returned to the client
@@ -53,7 +54,7 @@ def load_static(e):
 	except TemplateNotFound:
 		pass
 
-	if request.path.contains("."):
+	if "." in request.path:
 		filetype = request.path.split(".")[-1]
 	else: filetype = "html"
 

@@ -28,13 +28,13 @@
 
     </header>
     <section class="form">
-    <center>
-    <form>
+<center>
+    <form method="post">
         <h1>Contact Us</h1>
         <p>Full Name:</p>
-        <input type="text">
+        <input type="text" name="name">
         <p>Date:</p>
-        <input type="text">
+        <input type="text" name="date">
         <p>Subject:</p>
         <select name="subject">
             <option value="Please choose a subject"></option>
@@ -46,7 +46,7 @@
             <option value="general">General Inquiry</option>
         </select>
         <p>Body:</p>
-        <textarea></textarea>
+        <textarea name="message"></textarea>
         <br>
         <input type="submit">
     </form>
