@@ -75,56 +75,32 @@ Once your pull request is approved and merged, clean up your branch.
 
 ---
 
-## Run the webserver
+## How to run the project
 
-Note: on Unix systems the python executable is sometimes called python3
-
-#### 1. Install python and pip
-
-1. Install python
-   * Windows: ``winget python``
-   * Linux (debian/ubuntu): ``sudo apt install python3``
-
-2. Install pip
-``python -m pip install``
-
-3. Clone the repository (see above) and enter it (`cd ivory-orchid`)
-
-#### 2. (Optional) install and activate venv
-
-1. Install venv
-   * Windows: ``winget python-venv``
-   * Linux (debian/ubuntu): ``sudo apt install python3-venv``
-
-2. Change directory to the backend
-``cd backend``
-
-3. Create the virtual environment
-``python -m venv .venv``
- 
-   _tip: to change the name of the virtual environment add `--prompt name`_
-
-4. Activate the virtual environment 
-   * Windows: ``.\.venv\Scripts\activate``
-   * Linux: ``source .venv/bin/activate``
-   
-   To disable the virtual environment:
-   * Windows command prompt: ``.\.venv\Scripts\deactivate``
-   * Any other shell: `` deactivate``
-5. Return to the project root `cd ..`
-
-#### 3. Install the dependencies
-
+### Set up the project
+_NOTE: This should be run only once_
+#### Clone the repository and enter the directory
 ```bash
-pip install -r backend/requirements.txt
+git clone https://github.com/nhcarrigan-spring-2026-cohort/ivory-orchid.git
+cd ivory-orchid
+``` 
+#### Install Python and dependency
+```bash
+./scripts/install
 ```
 
-#### 4. Run flask
-
-To host the webpage to localhost (127.0.0.1)
+### Test the project
 ```bash
-flask --app backend run
+./scripts/test
 ```
+
+### Run the project
+```bash
+./scripts/run
+```
+This will run the webserver on localhost:5000
+
+To change the port add `--port=<port>`
 
 To enable debugging mode add the flag `--debug`
 
