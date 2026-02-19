@@ -5,4 +5,4 @@ inquiry_webhook_enabled: bool = inquiry_webhook is not None and inquiry_webhook.
 
 def send_inquiry(data) -> None :
 	if inquiry_webhook_enabled:
-		requests.post(inquiry_webhook, "inquiry form", data)
+		requests.post(inquiry_webhook, json=data)
