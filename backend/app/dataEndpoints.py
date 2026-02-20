@@ -2,7 +2,7 @@ from flask import Blueprint, Response
 
 from .types import *
 
-data_bp = Blueprint('data', __name__, url_prefix='/data')
+data_bp = Blueprint('data', __name__, url_prefix='/api')
 
 USE_DUMMY_VALUES = True #until the db is implemented
 
@@ -26,17 +26,31 @@ if USE_DUMMY_VALUES:
 		return [shelter_cohort, shelter_b, shelter_closed]
 	#endif USE_DUMMY_VALUES
 
-@data_bp.route('/pets')
-@data_bp.route('/pets.json')
-def pets():
-	return Response(jsonify(get_pets()), mimetype="application/json")
+@data_bp.route('/pets', methods = ['GET'])
+def full_pets_list():
+	return Response(jsonify(get_pets(), JsonType.Short), mimetype="application/json")
 
-@data_bp.route('/shelters')
-@data_bp.route('/shelters.json')
-def shelters():
-	return Response(jsonify(get_shelters()), mimetype="application/json")
+@data_bp.route('/pets/<int:pet_id>', methods = ['GET'])
+def pets_list_by_id(pet_id: int):
+	pets = list()
+	for pet in get_pets():
+		if pet.id == pet_id:
+			pets.append(pet)
+	return Response(jsonify(pets, JsonType.Full), mimetype="application/json")
 
-def jsonify(data, mapper = None) -> str:
+@data_bp.route('/shelters', methods = ['GET'])
+def all_shelters():
+	return Response(jsonify(get_shelters(), JsonType.Short), mimetype="application/json")
+
+@data_bp.route('/shelters/<int:shelter_id>', methods = ['GET'])
+def shelters_list_by_id(shelter_id: int):
+	shelters = list()
+	for shelter in get_shelters():
+		if shelter.id == shelter_id:
+				shelters.append(shelter)
+	return Response(jsonify(shelters, JsonType.Full), mimetype="application/json")
+
+def jsonify(data, json_type: JsonType, mapper = None) -> str:
 	"""
 	Function to convert an object to a JSON string
 
@@ -49,7 +63,7 @@ def jsonify(data, mapper = None) -> str:
 	Anything else will be passed to the mapper function (defaults to calling str()) which shall return a string
 	"""
 	if isinstance(data, Jsonifable):
-		return data.json()
+		return data.json(json_type)
 	if isinstance(data, list):
 		if mapper is None:
 			mapper = lambda x: str(x)
@@ -58,7 +72,7 @@ def jsonify(data, mapper = None) -> str:
 		is_object = False #True if it's an object, false if it's a list
 		for item in data:
 			if isinstance(item, Jsonifable):
-				result += item.json() + ","
+				result += item.json(json_type) + ","
 			elif isinstance(item, list):
 				result += jsonify(item, mapper) + ","
 
