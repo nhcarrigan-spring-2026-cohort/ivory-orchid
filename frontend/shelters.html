@@ -29,25 +29,14 @@
         <a class="cta" href="adopt.html"><button>Adopt Now</button></a> <!--'cta' -> Call to Action-->
 
     </header>
-
-    <!--hero banner starts here-->
-    <div class="hero-image"> <!--we should come up with an eye catching style for this-->
-        <img src="img\dogandcat.jpg" alt="Dog and cat" class="hero-photo">
-        <div class="hero-text">
-            <h1>Ivory Orchid</h1>
-            <p>Every pet deserves a home.</p>
-            <a href="adopt.html"><button>Adopt a Pet!</button></a>
-            <!--maybe adding a background image would be nice??-->
-        </div>
+    <div class="card-container" id="shelter-card-container">
+        <!-- Will get populated by js -->
     </div>
-
-
-
-
-
-
     <!--all JavaScript goes in index.js!-->
     <script src="index.js"></script>
+    <!-- Ensure the page is loaded before rendering;
+     Reference: https://developer.mozilla.org/en-US/docs/Web/API/Window/load_event -->
+    <script>window.addEventListener("load", (e) => displayShelters())</script>
 </body>
 
 </html>
