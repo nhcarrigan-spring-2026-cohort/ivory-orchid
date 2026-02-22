@@ -10,14 +10,20 @@ class Jsonifable(ABC):
     def json(self, json_type: JsonType = JsonType.Full) -> str:
         pass
 
+shelter_id = 0
+pets_id = 0
+
 class Shelter(Jsonifable):
-    id: int = -1
+    id: int
     name: str
     email: str
     phone_number: str
     address: str
 
     def __init__(self, name: str, email: str, phone_number: str, address: str):
+        global shelter_id
+        self.id = shelter_id
+        shelter_id += 1
         self.name = name
         self.email = email
         self.phone_number = phone_number
@@ -31,7 +37,7 @@ class Shelter(Jsonifable):
                 "\",\"address\":\"" + self.address + "\"}")
 
 class Pet(Jsonifable):
-    id: int = -1
+    id: int
     name: str
     age: int
     sex: str
@@ -44,6 +50,9 @@ class Pet(Jsonifable):
 
     def __init__(self, name: str, age: int, sex: str, description: str,
                  image_path: str, size: float, shelter_name: str, status: bool, animal: str):
+        global pets_id
+        self.id = pets_id
+        pets_id += 1
         self.name = name
         self.age = age
         self.sex = sex
