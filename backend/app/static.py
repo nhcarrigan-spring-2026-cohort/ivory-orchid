@@ -20,8 +20,9 @@ TEMPLATE_404 = "404.html"
 #The 404 static version of the page (fallback if the template version does not work)
 FILE_404 = "404.html"
 
-#Add here all the pages that have a different e
-# ndpoint from the page name
+custom_404 = {"/api": "{\"code\":404,\"message\":\"The requested page was not found\"}"}
+
+#Add here all the pages that have a different endpoint from the page name
 @app.route("/")
 def main_page():
     return get_page_or_template("index.html", default="The site is currently unavailable (maybe it's in maintenance?)\ncode: index404")
@@ -62,14 +63,15 @@ def load_static(e):
     if filetype in FRONTEND_SPECIFIC:
         paths.add(os.path.join(FRONTEND_DIRECTORY, FRONTEND_SPECIFIC[filetype]))
 
-	for path in paths:
-		path = safe_join(path, request.path.lstrip("/"))
-		if os.path.exists(path):
-			return send_file(path)
     for path in paths:
         path = safe_join(path, request.path.lstrip("/"))
         if os.path.exists(path):
             return send_file(path)
+
+    for endpoint, message in custom_404.items():
+        endpoint = endpoint.lower()
+        if request.path.startswith(endpoint):
+            return message, 404
 
     return get_page_or_template(FILE_404, TEMPLATE_404, "An internal error occurred while trying to return the 404 error page"), 404
 
