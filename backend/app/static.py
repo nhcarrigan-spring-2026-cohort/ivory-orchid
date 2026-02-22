@@ -1,12 +1,14 @@
-from flask import render_template, Response
-from flask import request
-from flask import send_file
+from flask import Blueprint, render_template, Response, request, send_file, jsonify as flask_jsonify
 from jinja2 import TemplateNotFound
-
 from werkzeug.security import safe_join
+from sqlalchemy.exc import IntegrityError
 import os
 
-from . import app, utils
+from . import db, utils
+from .models import Contact
+from .validators import validate_contact_data
+
+static_bp = Blueprint('static', __name__)
 
 #Directory where non-template files are searched
 #Those paths are not checked
@@ -20,28 +22,80 @@ TEMPLATE_404 = "404.html"
 #The 404 static version of the page (fallback if the template version does not work)
 FILE_404 = "404.html"
 
-#Add here all the pages that have a different e
-# ndpoint from the page name
-@app.route("/")
+#Add here all the pages that have a different endpoint from the page name
+@static_bp.route("/")
 def main_page():
 	return get_page_or_template("index.html", default="The site is currently unavailable (maybe it's in maintenance?)\ncode: index404")
 
-@app.route("/contact", methods=["GET", "POST"])
-@app.route("/contact.html", methods=["GET", "POST"])
+@static_bp.route("/contact", methods=["GET", "POST"])
+@static_bp.route("/contact.html", methods=["GET", "POST"])
 def contact_page():
-	print(request.method)
+	"""
+	Handle contact form submissions with validation and database persistence.
+	
+	GET: Render the contact form.
+	POST: Validate data, store in database, send webhook inquiry, and return response.
+	"""
 	if request.method == "GET":
 		result = get_page_or_template("contact.html")
 		if isinstance(result, str) and len(result) == 0:
 			return get_page_or_template(FILE_404, TEMPLATE_404, "The requested page does not exists"), 404
 		return result
-	utils.send_inquiry(request.form)
-
-	return "<html><head></head><body>Request successfully sent!\n<a href=\"/\">Return to the home</a></body></html>"
+	
+	# Handle POST request
+	# Accept both form data and JSON
+	if request.is_json:
+		data = request.get_json()
+	else:
+		data = request.form.to_dict()
+	
+	# Validate contact data
+	is_valid, errors = validate_contact_data(data)
+	if not is_valid:
+		return flask_jsonify({
+			"message": "Validation failed",
+			"errors": errors
+		}), 400
+	
+	try:
+		# Create contact record in database
+		new_contact = Contact(
+			name=data['name'].strip(),
+			email=data['email'].strip(),
+			message=data['message'].strip()
+		)
+		
+		db.session.add(new_contact)
+		db.session.commit()
+		
+		# Send webhook inquiry if configured
+		utils.send_inquiry(data)
+		
+		# Return JSON response for API requests, HTML for form submissions
+		if request.is_json:
+			return flask_jsonify({
+				"message": "Contact form submitted successfully",
+				"contact": new_contact.to_dict()
+			}), 201
+		else:
+			# For regular form submissions, return HTML response
+			return "<html><head></head><body>Request successfully sent!\n<a href=\"/\">Return to the home</a></body></html>"
+	
+	except IntegrityError:
+		db.session.rollback()
+		return flask_jsonify({
+			"message": "Error processing request",
+			"error": "Database error occurred"
+		}), 409
+	except Exception as e:
+		db.session.rollback()
+		return flask_jsonify({
+			"message": "Internal server error",
+			"error": str(e)
+		}), 500
 
 #Handles all pages not generated dynamically
 #Will return the page if found, else the TEMPLATE_404 template will be returned to the client
-@app.errorhandler(404)
 def load_static(e):
 	# Prevent direct access to templates
 	if request.path.__contains__("templates"):

@@ -1,6 +1,10 @@
-from flask import Blueprint, Response
+from flask import Blueprint, Response, request, jsonify as flask_jsonify
+from sqlalchemy.exc import IntegrityError
 
 from .types import *
+from . import db
+from .models import User
+from .validators import validate_user_data
 
 data_bp = Blueprint('data', __name__, url_prefix='/api')
 
@@ -97,3 +101,96 @@ def jsonify(data, json_type: JsonType, mapper = None) -> str:
 		return result
 
 	return data
+@data_bp.route('/users/register', methods=['POST'])
+def register_user():
+	"""
+	Register a new user with validation.
+	
+	Request body (JSON):
+	{
+		"name": "John Doe",
+		"email": "john@example.com",
+		"age": 25
+	}
+	
+	Returns:
+	- 201 Created: User successfully created
+	  {
+	    "message": "User registered successfully",
+	    "user": {
+	      "id": 1,
+	      "name": "John Doe",
+	      "email": "john@example.com",
+	      "age": 25,
+	      "created_at": "2026-02-22T10:30:00"
+	    }
+	  }
+	
+	- 400 Bad Request: Validation errors
+	  {
+	    "message": "Validation failed",
+	    "errors": {
+	      "email": "Invalid email format: ...",
+	      "age": "Age must be a positive integer"
+	    }
+	  }
+	
+	- 409 Conflict: Email already exists
+	  {
+	    "message": "Email already registered",
+	    "error": "A user with this email already exists"
+	  }
+	
+	- 422 Unprocessable Entity: Malformed JSON
+	  {
+	    "message": "Invalid JSON data",
+	    "error": "..."
+	  }
+	"""
+	try:
+		# Parse JSON data
+		data = request.get_json()
+		if not data:
+			return flask_jsonify({
+				"message": "Invalid JSON data",
+				"error": "Request body must be valid JSON"
+			}), 422
+		
+		# Validate input data
+		is_valid, errors = validate_user_data(data)
+		if not is_valid:
+			return flask_jsonify({
+				"message": "Validation failed",
+				"errors": errors
+			}), 400
+		
+		# Create new user
+		new_user = User(
+			name=data['name'].strip(),
+			email=data['email'].strip(),
+			age=int(data['age'])
+		)
+		
+		# Add to database and commit
+		db.session.add(new_user)
+		db.session.commit()
+		
+		return flask_jsonify({
+			"message": "User registered successfully",
+			"user": new_user.to_dict()
+		}), 201
+		
+	except IntegrityError:
+		# Handle unique constraint violation (duplicate email)
+		db.session.rollback()
+		return flask_jsonify({
+			"message": "Email already registered",
+			"error": "A user with this email already exists"
+		}), 409
+	except Exception as e:
+		# Handle unexpected errors (including JSON parsing errors)
+		db.session.rollback()
+		return flask_jsonify({
+			"message": "Invalid JSON data",
+			"error": str(e)
+		}), 422
