@@ -1,6 +1,10 @@
 from abc import ABC, abstractmethod
 from enum import Enum
 
+from sqlalchemy.orm import Mapped
+
+from . import db
+
 class JsonType(Enum):
     Full = 1
     Short = 2
@@ -10,12 +14,16 @@ class Jsonifable(ABC):
     def json(self, json_type: JsonType = JsonType.Full) -> str:
         pass
 
-class Shelter(Jsonifable):
-    id: int = -1
-    name: str
-    email: str
-    phone_number: str
-    address: str
+#Fix multiple metaclass error with multiple inheritance
+class CommonMetaclass(type(Jsonifable), type(db.Model)):
+    pass
+
+class Shelter(Jsonifable, db.Model, metaclass=CommonMetaclass):
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
+    name: Mapped[str]
+    email: Mapped[str]
+    phone_number: Mapped[str]
+    address: Mapped[str]
 
     def __init__(self, name: str, email: str, phone_number: str, address: str):
         self.name = name
@@ -30,17 +38,17 @@ class Shelter(Jsonifable):
                 "\",\"phone\":\"" + self.phone_number +
                 "\",\"address\":\"" + self.address + "\"}")
 
-class Pet(Jsonifable):
-    id: int = -1
-    name: str
-    age: int
-    sex: str
-    description: str
-    image_path: str
-    size: float
-    shelter_name: str
-    status: bool
-    animal: str
+class Pet(Jsonifable, db.Model, metaclass=CommonMetaclass):
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
+    name: Mapped[str]
+    age: Mapped[int]
+    sex: Mapped[str]
+    description: Mapped[str]
+    image_path: Mapped[str]
+    size: Mapped[float]
+    shelter_name: Mapped[str]
+    status: Mapped[bool]
+    animal: Mapped[str]
 
     def __init__(self, name: str, age: int, sex: str, description: str,
                  image_path: str, size: float, shelter_name: str, status: bool, animal: str):

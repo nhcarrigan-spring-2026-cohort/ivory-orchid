@@ -4,51 +4,21 @@ from .types import *
 
 data_bp = Blueprint('data', __name__, url_prefix='/api')
 
-USE_DUMMY_VALUES = True #until the db is implemented
-
-if USE_DUMMY_VALUES:
-	def get_pets() -> list[Pet]:
-		dog1 = Pet("rex", 10, "male", "calm border-collie", "kripto.jpg", 6.25, "cohort", True, "dog")
-		dog2 = Pet("max", 3, "male", "survived a car crash", "dogandcat.jpg", 2.1, "shelterB", True, "dog")
-		dog3 = Pet("bella", 1, "female", "loves big walks, needs attention", "kripto.jpg", 6.25, "cohort", True, "dog")
-
-		cat1 = Pet("Snowball", 10, "male", "Full of energy", "dogandcat.jpg", 15, "shelterB", True, "cat")
-		cat2 = Pet("fog", 10, "female", "has an interesting color", "snowball.jpg", 3, "cohort", True, "cat")
-		cat3 = Pet("sunny", 10, "female", "Very fat", "dogandcat.jpg", 8, "closedShelter", False, "cat")
-
-		return [dog1, dog2, dog3, cat1, cat2, cat3]
-
-	def get_shelters() -> list[Shelter]:
-		shelter_cohort = Shelter("cohort", "ivory-orchid@cohort.org", "+156547896542", "12 rue de Prony, 75017 Paris, France")
-		shelter_b = Shelter("shelterB", "shelters@ivory.orchid.org", "+215654789564", "760 United Nations Plaza, New York, NY 10017, USA")
-		shelter_closed = Shelter("closedShelter", "automations@example.com","+0123456789","1600 Pennsylvania Ave NW, Washington, DC 20500, USA")
-
-		return [shelter_cohort, shelter_b, shelter_closed]
-	#endif USE_DUMMY_VALUES
-
 @data_bp.route('/pets', methods = ['GET'])
 def full_pets_list():
-	return Response(jsonify(get_pets(), JsonType.Short), mimetype="application/json")
+	return Response(jsonify(Pet.query.all(), JsonType.Short), mimetype="application/json")
 
 @data_bp.route('/pets/<int:pet_id>', methods = ['GET'])
 def pets_list_by_id(pet_id: int):
-	pets = list()
-	for pet in get_pets():
-		if pet.id == pet_id:
-			pets.append(pet)
-	return Response(jsonify(pets, JsonType.Full), mimetype="application/json")
-
+	return Response(jsonify(Pet.query.filter_by(id=pet_id).all(), JsonType.Full), mimetype="application/json")
+s_sh = True
 @data_bp.route('/shelters', methods = ['GET'])
 def all_shelters():
-	return Response(jsonify(get_shelters(), JsonType.Short), mimetype="application/json")
+	return Response(jsonify(Shelter.query.all(), JsonType.Short), mimetype="application/json")
 
 @data_bp.route('/shelters/<int:shelter_id>', methods = ['GET'])
 def shelters_list_by_id(shelter_id: int):
-	shelters = list()
-	for shelter in get_shelters():
-		if shelter.id == shelter_id:
-				shelters.append(shelter)
-	return Response(jsonify(shelters, JsonType.Full), mimetype="application/json")
+	return Response(jsonify(Shelter.query.filter_by(id=shelter_id).all(), JsonType.Full), mimetype="application/json")
 
 def jsonify(data, json_type: JsonType, mapper = None) -> str:
 	"""
