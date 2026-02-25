@@ -7,3 +7,4 @@ MarkupSafe==3.0.3
 Werkzeug==3.1.5
 pytest==9.0.2
 coverage==7.13.4
+requests==2.32.5
