@@ -20,65 +20,71 @@ TEMPLATE_404 = "404.html"
 #The 404 static version of the page (fallback if the template version does not work)
 FILE_404 = "404.html"
 
-#Add here all the pages that have a different e
-# ndpoint from the page name
+custom_404 = {"/api": "{\"code\":404,\"message\":\"The requested page was not found\"}"}
+
+#Add here all the pages that have a different endpoint from the page name
 @app.route("/")
 def main_page():
-	return get_page_or_template("index.html", default="The site is currently unavailable (maybe it's in maintenance?)\ncode: index404")
+    return get_page_or_template("index.html", default="The site is currently unavailable (maybe it's in maintenance?)\ncode: index404")
 
 @app.route("/contact", methods=["GET", "POST"])
 @app.route("/contact.html", methods=["GET", "POST"])
 def contact_page():
-	print(request.method)
-	if request.method == "GET":
-		result = get_page_or_template("contact.html")
-		if isinstance(result, str) and len(result) == 0:
-			return get_page_or_template(FILE_404, TEMPLATE_404, "The requested page does not exists"), 404
-		return result
-	utils.send_inquiry(request.form)
+    print(request.method)
+    if request.method == "GET":
+        result = get_page_or_template("contact.html")
+        if isinstance(result, str) and len(result) == 0:
+            return get_page_or_template(FILE_404, TEMPLATE_404, "The requested page does not exists"), 404
+        return result
+    utils.send_inquiry(request.form)
 
-	return "<html><head></head><body>Request successfully sent!\n<a href=\"/\">Return to the home</a></body></html>"
+    return "<html><head></head><body>Request successfully sent!\n<a href=\"/\">Return to the home</a></body></html>"
 
 #Handles all pages not generated dynamically
 #Will return the page if found, else the TEMPLATE_404 template will be returned to the client
 @app.errorhandler(404)
 def load_static(e):
-	# Prevent direct access to templates
-	if request.path.__contains__("templates"):
-		return get_page_or_template(FILE_404, TEMPLATE_404, "The requested page does not exists"), 404
+    # Prevent direct access to templates
+    if request.path.__contains__("templates"):
+        return get_page_or_template(FILE_404, TEMPLATE_404, "The requested page does not exists"), 404
 
-	paths = set()
-	paths.add(FRONTEND_DIRECTORY)
+    paths = set()
+    paths.add(FRONTEND_DIRECTORY)
 
-	try:
-		return render_template(request.path.split("/")[-1])
-	except TemplateNotFound:
-		pass
+    try:
+        return render_template(request.path.split("/")[-1])
+    except TemplateNotFound:
+        pass
 
-	if "." in request.path:
-		filetype = request.path.split(".")[-1]
-	else: filetype = "html"
+    if "." in request.path:
+        filetype = request.path.split(".")[-1]
+    else: filetype = "html"
 
-	if filetype in FRONTEND_SPECIFIC:
-		paths.add(os.path.join(FRONTEND_DIRECTORY, FRONTEND_SPECIFIC[filetype]))
+    if filetype in FRONTEND_SPECIFIC:
+        paths.add(os.path.join(FRONTEND_DIRECTORY, FRONTEND_SPECIFIC[filetype]))
 
-	for path in paths:
-		path = safe_join(path, request.path.lstrip("/"))
-		if os.path.exists(path):
-			return send_file(path)
+    for path in paths:
+        path = safe_join(path, request.path.lstrip("/"))
+        if os.path.exists(path):
+            return send_file(path)
 
-	return get_page_or_template(FILE_404, TEMPLATE_404, "An internal error occurred while trying to return the 404 error page"), 404
+    for endpoint, message in custom_404.items():
+        endpoint = endpoint.lower()
+        if request.path.startswith(endpoint):
+            return message, 404
+
+    return get_page_or_template(FILE_404, TEMPLATE_404, "An internal error occurred while trying to return the 404 error page"), 404
 
 def get_page_or_template(page_name: str, template_name: str | None = None, default: str | None = None) -> str | Response:
-	if template_name is None:
-		template_name = page_name
-	try:
-		return render_template(template_name)
-	except TemplateNotFound:
-		# noinspection PyBroadException
-		try:
-			return send_file(safe_join(FRONTEND_DIRECTORY, page_name))
-		except:
-			if default is None:
-				return ""
-			return default
+    if template_name is None:
+        template_name = page_name
+    try:
+        return render_template(template_name)
+    except TemplateNotFound:
+        # noinspection PyBroadException
+        try:
+            return send_file(safe_join(FRONTEND_DIRECTORY, page_name))
+        except:
+            if default is None:
+                return ""
+            return default
