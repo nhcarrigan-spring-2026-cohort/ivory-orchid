@@ -2,7 +2,6 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 
@@ -382,92 +381,4 @@ button:hover {
 
 .error-warning a:hover {
   background-color: #e67e2a;
-}
-
-/*The contact form starts here*/
-.container {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-              url(/frontend/img/Dog.jpg) no-repeat center/cover;
-  font-family: sans-serif;
-  overflow: hidden;
-}
-
-
-
-.container form {
-  width: 100%;
-  max-width: 500px;
-  height: auto;
-  padding: 30px;
-  display: flex;
-  flex-direction: column; 
-  border-radius: 15px;
-  background: rgba(255, 255, 255, 0.3); 
-  backdrop-filter: blur(25px) brightness(1.2);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: white;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2)
- 
-
-}
-
-.container form h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #562F00;
-}
-
-.input-group {
-  margin-bottom: 15px;
-  display: flex;
-  flex-direction: column;
-}
-
-.input-group label {
-  margin-bottom: 5px;
-  font-weight: 600;
-  color: #562F00;
-}
-
-.container form input:not([type="submit"]), 
-.container form select, 
-.container form textarea {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  box-sizing: border-box; 
-}
-
-.container form textarea {
-  height: 100px;
-  resize: none; 
-}
-
-.contactButton {
-  width: 150px;
-  margin: 10px auto 0;
-  padding: 12px;
-  background: #7e4602;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-  display: block;
-  box-sizing:border-box;
-  
-  
-}
-
-.contactButton:hover {
-  background: #562F00;
-  transform: translateY(-2px);
 }
