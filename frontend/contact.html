@@ -41,7 +41,10 @@
         <label for="date">Date:</label>
         <input type="date" id="date">
       </div>
-
+      <div class="input-group">
+        <label for="email" name="email">Email:</label>
+        <input type="email" id="email">
+      </div>
       <div class="input-group">
         <label for="subject">Subject:</label>
         <select name="subject" id="subject">
@@ -60,7 +63,7 @@
         <textarea required placeholder="Write your message here..."></textarea>
       </div>
 
-      <button class='contactButton' type="submit">Send</button>
+      <button class='contactButton' type="submit" onclick="clicked(event)">Send</button>
       
     </form>
   </div>

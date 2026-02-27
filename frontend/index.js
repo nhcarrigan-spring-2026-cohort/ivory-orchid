@@ -34,3 +34,14 @@ async function displayShelters() {
         document.getElementById("shelter-card-container").innerHTML = `<p>Failed to load data. Please try again later.</p>`
     }
 }
+
+// form confirmation popup frontend
+function clicked(e) {
+    {
+        if(!confirm('Ready to send?')) {
+            e.preventDefault();
+            return
+        }
+        alert("Form submitted. Please expect a response within 1 business day.")
+    }
+}
